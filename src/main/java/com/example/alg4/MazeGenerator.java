@@ -26,12 +26,20 @@ public class MazeGenerator {
         this.endY = endY;
     }
 
+    public int[][] getTab() {
+        return tab;
+    }
 
     public void startGeneratingMaze(){
         createTable();
         setPoints();
         choiceWay();
         showMaze();
+        setStart();
+    }
+
+    private void setStart(){
+        tab[startX*2][startY*2] = 4;
     }
 
     private void choiceWay(){
