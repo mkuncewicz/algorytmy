@@ -31,18 +31,103 @@ public class MazeGenerator {
     }
 
     public void startGeneratingMaze(){
+        //Pierwszy etap
         createTable();
         setPoints();
-        choiceWay();
-        showMaze();
+        choiceWayToEnd();
+        System.out.println("Pierwszy etap:");
+//        showMaze();
         setStart();
-    }
+        //Drug etap
+        makeRestOfAre();
+//        System.out.println("\n\n");
+//        System.out.println("Drugi etap:");
+        showMaze();
 
+    }
     private void setStart(){
         tab[startX*2][startY*2] = 4;
     }
 
-    private void choiceWay(){
+    private void makeRestOfAre(){
+
+        while (!isAreFull()){
+            choiceWayToRoad();
+        }
+    }
+
+    private void choiceWayToRoad(){
+
+        int[][] directions = {{2,0},{0,2},{-2,0},{0,-2}};
+        int curX = findNextEmptyX();
+        int curY = findNextEmptyY(curX);
+        Stack<int[]> curPathStack = new Stack<>();
+
+        boolean isFind = false;
+        while (!isFind){
+            boolean foundMove = false;
+
+            if (tab[curX][curY] == 2) isFind = true;
+            else tab[curX][curY] = 2;
+
+            shuffleArray(directions);
+            for (int[] dir : directions) {
+                int nextX = curX + dir[0];
+                int nextY = curY + dir[1];
+
+                if (!checkLegalMove(nextX,nextY)) continue;
+                if (tab[nextX][nextY] == 3 || tab[nextX][nextY] == 2) {
+                    foundMove = true;
+                    pathStack.push(new int[]{curX,curY});
+                    int difX = (curX - nextX)/2;
+                    int difY = (curY - nextY)/2;
+                    tab[curX - difX][curY - difY] = 2;
+
+                    curX = nextX;
+                    curY = nextY;
+                    break;
+                }
+            }
+            if (!foundMove){
+                curPathStack.pop();
+                if (!curPathStack.isEmpty()){
+                    int[] prePosition = curPathStack.peek();
+                    curX = prePosition[0];
+                    curY = prePosition[1];
+                }
+            }
+        }
+
+    }
+
+    private boolean isAreFull(){
+
+        for (int i = 0; i < tab.length; i+= 2){
+            for (int y = 0; y< tab.length; y+= 2){
+                if (tab[i][y] == 3) return  false;
+            }
+        }
+        return true;
+    }
+    private int findNextEmptyX(){
+
+        for (int i = 0; i<tab.length; i +=2){
+            for (int y = 0; y<tab.length; y+=2){
+                if (tab[i][y] == 3) return i;
+            }
+        }
+        return -1;
+    }
+
+    private int findNextEmptyY(int x){
+        if (x < 0 || x >= tab.length) return -1;
+        for (int i = 0; i < tab.length; i+=2){
+            if (tab[x][i] == 3) return i;
+        }
+        return -1;
+    }
+
+    private void choiceWayToEnd(){
 
         int[][] directions = {{2, 0}, {0, 2}, {-2, 0}, {0, -2}};
         int curX = startX;
