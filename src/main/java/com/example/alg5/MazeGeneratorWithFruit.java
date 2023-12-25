@@ -20,8 +20,8 @@ public class MazeGeneratorWithFruit {
     private int amountOfFruit;
 
     public MazeGeneratorWithFruit(int size, int startX, int startY, int endX, int endY) {
-        int walls = size -1;
-        this.tab = new int[size+walls][size+walls];
+        int walls = size - 1;
+        this.tab = new int[size + walls][size + walls];
         this.startX = startX;
         this.startY = startY;
         this.endX = endX;
@@ -32,7 +32,7 @@ public class MazeGeneratorWithFruit {
         return tab;
     }
 
-    public void startGeneratingMaze(){
+    public void startGeneratingMaze() {
         //Pierwszy etap
         createTable();
         setPoints();
@@ -50,21 +50,22 @@ public class MazeGeneratorWithFruit {
 
     }
 
-    public void startAlg2(){
+    public void startAlg2() {
         setTab();
         showMaze();
         System.out.println("\n\n");
         System.out.println("Drugi: \n");
+
         amountOfFruit = 7;
         pickingFruit();
         showMaze();
     }
 
-    private void setStart(){
-        tab[startX*2][startY*2] = 4;
+    private void setStart() {
+        tab[startX * 2][startY * 2] = 4;
     }
 
-    private void setTab(){
+    private void setTab() {
         tab = new int[9][9];
 
         tab[0][0] = 4;
@@ -158,22 +159,23 @@ public class MazeGeneratorWithFruit {
         tab[8][7] = 1;
         tab[8][8] = 2;
     }
-    private void makeRestOfAre(){
 
-        while (!isAreFull()){
+    private void makeRestOfAre() {
+
+        while (!isAreFull()) {
             choiceWayToRoad();
         }
     }
 
-    private void choiceWayToRoad(){
+    private void choiceWayToRoad() {
 
-        int[][] directions = {{2,0},{0,2},{-2,0},{0,-2}};
+        int[][] directions = {{2, 0}, {0, 2}, {-2, 0}, {0, -2}};
         int curX = findNextEmptyX();
         int curY = findNextEmptyY(curX);
         Stack<int[]> curPathStack = new Stack<>();
 
         boolean isFind = false;
-        while (!isFind){
+        while (!isFind) {
             boolean foundMove = false;
 
             if (tab[curX][curY] == 2) isFind = true;
@@ -184,12 +186,12 @@ public class MazeGeneratorWithFruit {
                 int nextX = curX + dir[0];
                 int nextY = curY + dir[1];
 
-                if (!checkLegalMove(nextX,nextY)) continue;
+                if (!checkLegalMove(nextX, nextY)) continue;
                 if (tab[nextX][nextY] == 3 || tab[nextX][nextY] == 2) {
                     foundMove = true;
-                    pathStack.push(new int[]{curX,curY});
-                    int difX = (curX - nextX)/2;
-                    int difY = (curY - nextY)/2;
+                    pathStack.push(new int[]{curX, curY});
+                    int difX = (curX - nextX) / 2;
+                    int difY = (curY - nextY) / 2;
                     tab[curX - difX][curY - difY] = 2;
 
                     curX = nextX;
@@ -197,9 +199,9 @@ public class MazeGeneratorWithFruit {
                     break;
                 }
             }
-            if (!foundMove){
+            if (!foundMove) {
                 curPathStack.pop();
-                if (!curPathStack.isEmpty()){
+                if (!curPathStack.isEmpty()) {
                     int[] prePosition = curPathStack.peek();
                     curX = prePosition[0];
                     curY = prePosition[1];
@@ -209,40 +211,42 @@ public class MazeGeneratorWithFruit {
 
     }
 
-    private boolean isAreFull(){
+    private boolean isAreFull() {
 
-        for (int i = 0; i < tab.length; i+= 2){
-            for (int y = 0; y< tab.length; y+= 2){
-                if (tab[i][y] == 3) return  false;
+        for (int i = 0; i < tab.length; i += 2) {
+            for (int y = 0; y < tab.length; y += 2) {
+                if (tab[i][y] == 3) return false;
             }
         }
         return true;
     }
-    private int findNextEmptyX(){
 
-        for (int i = 0; i<tab.length; i +=2){
-            for (int y = 0; y<tab.length; y+=2){
+    private int findNextEmptyX() {
+
+        for (int i = 0; i < tab.length; i += 2) {
+            for (int y = 0; y < tab.length; y += 2) {
                 if (tab[i][y] == 3) return i;
             }
         }
         return -1;
     }
 
-    private int findNextEmptyY(int x){
+    private int findNextEmptyY(int x) {
         if (x < 0 || x >= tab.length) return -1;
-        for (int i = 0; i < tab.length; i+=2){
+        for (int i = 0; i < tab.length; i += 2) {
             if (tab[x][i] == 3) return i;
         }
         return -1;
     }
 
-    private void choiceWayToEnd(){
+    private void choiceWayToEnd() {
 
         int[][] directions = {{2, 0}, {0, 2}, {-2, 0}, {0, -2}};
         int curX = startX;
         int curY = startY;
         boolean isCompletely = false;
-        while (!isCompletely){
+
+        while (!isCompletely) {
             tab[curX][curY] = 2;
             if (isEnd(curX, curY)) isCompletely = true;
 
@@ -255,9 +259,9 @@ public class MazeGeneratorWithFruit {
 
                 if (checkLegalMove(nextX, nextY) && tab[nextX][nextY] == 3) {
                     foundMove = true;
-                    pathStack.push(new int[]{curX,curY});
-                    int difX = (curX - nextX)/2;
-                    int difY = (curY - nextY)/2;
+                    pathStack.push(new int[]{curX, curY});
+                    int difX = (curX - nextX) / 2;
+                    int difY = (curY - nextY) / 2;
                     tab[curX - difX][curY - difY] = 2;
 
                     curX = nextX;
@@ -265,9 +269,9 @@ public class MazeGeneratorWithFruit {
                     break;
                 }
             }
-            if (!foundMove){
+            if (!foundMove) {
                 pathStack.pop();
-                if (!pathStack.isEmpty()){
+                if (!pathStack.isEmpty()) {
                     int[] prePosition = pathStack.peek();
                     curX = prePosition[0];
                     curY = prePosition[1];
@@ -277,35 +281,35 @@ public class MazeGeneratorWithFruit {
         }
     }
 
-    private boolean isEnd(int x, int y){
-        if (checkLegalMove(x+2,y)){
-            if (tab[x+2][y] == 5) {
-                tab[x+1][y] = 2;
+    private boolean isEnd(int x, int y) {
+        if (checkLegalMove(x + 2, y)) {
+            if (tab[x + 2][y] == 5) {
+                tab[x + 1][y] = 2;
                 return true;
             }
         }
-        if (checkLegalMove(x,y+2)) {
-            if (tab[x][y + 2] == 5){
-                tab[x][y+1] = 2;
+        if (checkLegalMove(x, y + 2)) {
+            if (tab[x][y + 2] == 5) {
+                tab[x][y + 1] = 2;
                 return true;
             }
         }
-        if (checkLegalMove(x-2,y)) {
+        if (checkLegalMove(x - 2, y)) {
             if (tab[x - 2][y] == 5) {
-                tab[x-1][y] = 2;
+                tab[x - 1][y] = 2;
                 return true;
             }
         }
-        if (checkLegalMove(x,y-2)) {
-            if (tab[x][y - 2] == 5){
-                tab[x][y-1] = 2;
+        if (checkLegalMove(x, y - 2)) {
+            if (tab[x][y - 2] == 5) {
+                tab[x][y - 1] = 2;
                 return true;
             }
         }
         return false;
     }
 
-    private void shuffleArray(int[][]array){
+    private void shuffleArray(int[][] array) {
         for (int i = array.length - 1; i > 0; i--) {
             int index = random.nextInt(i + 1);
             int[] a = array[index];
@@ -314,29 +318,30 @@ public class MazeGeneratorWithFruit {
         }
     }
 
-    private boolean checkLegalMove(int x, int y){
-        return x >= 0 && x < tab.length && y >= 0  && y < tab.length;
-    }
-    private void setPoints(){
-        tab[(endX*2)][(endY*2)] = 5;
+    private boolean checkLegalMove(int x, int y) {
+        return x >= 0 && x < tab.length && y >= 0 && y < tab.length;
     }
 
-    private void createTable(){
-        for (int i = 0; i < tab.length; i++){
-            for (int y = 0; y < tab.length; y++){
+    private void setPoints() {
+        tab[(endX * 2)][(endY * 2)] = 5;
+    }
+
+    private void createTable() {
+        for (int i = 0; i < tab.length; i++) {
+            for (int y = 0; y < tab.length; y++) {
                 if (i % 2 == 0 && y % 2 == 0) tab[i][y] = 3;
                 else tab[i][y] = 1;
             }
         }
     }
 
-    private void showMaze(){
-        for (int i = -2; i < tab.length; i++){
+    private void showMaze() {
+        for (int i = -2; i < tab.length; i++) {
             System.out.print("# ");
         }
         System.out.println();
-        for (int i = 0; i < tab.length; i++){
-            for (int y = 0; y< tab.length; y++){
+        for (int i = 0; i < tab.length; i++) {
+            for (int y = 0; y < tab.length; y++) {
                 if (y == 0) System.out.print("# ");
                 if (tab[i][y] == 1) System.out.print("# ");
                 if (tab[i][y] == 2) System.out.print("  ");
@@ -345,27 +350,28 @@ public class MazeGeneratorWithFruit {
                 if (tab[i][y] == 5) System.out.print("E ");
                 if (tab[i][y] == 6) System.out.print("& ");
                 if (tab[i][y] == 7) System.out.print("X ");
-                if (tab[i][y] == 8) System.out.print("* ");
-                if (y == tab.length-1) System.out.print("# ");
+                if (tab[i][y] == 8) System.out.print("  ");
+                if (tab[i][y] == 9) System.out.print("X ");
+                if (y == tab.length - 1) System.out.print("# ");
             }
             System.out.println();
         }
-        for (int i = -2; i < tab.length; i++){
+        for (int i = -2; i < tab.length; i++) {
             System.out.print("# ");
         }
     }
 
-    private void setFruit(){
+    private void setFruit() {
 
         amountOfFruit = random.nextInt(7) + 2;
         int curAmount = 0;
 
-        while (curAmount < amountOfFruit){
+        while (curAmount < amountOfFruit) {
 
             int positionX = random.nextInt(tab.length);
             int positionY = random.nextInt(tab.length);
 
-            if (tab[positionX][positionY] == 2){
+            if (tab[positionX][positionY] == 2) {
                 tab[positionX][positionY] = 6;
                 curAmount++;
             }
@@ -374,7 +380,7 @@ public class MazeGeneratorWithFruit {
     }
 
 
-    private void pickingFruit(){
+    private void pickingFruit() {
 
         int[][] directions = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
         int curX = startX;
@@ -382,20 +388,30 @@ public class MazeGeneratorWithFruit {
 
         Stack<int[]> backPathStack = new Stack<>();
 
+        boolean roadToFruit = false;
+
         int collectedFruit = 0;
-        while (collectedFruit < amountOfFruit){
+
+        while (collectedFruit < amountOfFruit) {
             boolean foundMove = false;
             for (int[] dir : directions) {
                 int nextX = curX + dir[0];
                 int nextY = curY + dir[1];
 
-                if (checkLegalMove(nextX,nextY)){
-                    if (tab[nextX][nextY] == 2 || tab[nextX][nextY] == 6){
-                        foundMove = true;
-                        if (tab[nextX][nextY] == 6) collectedFruit++;
+                if (checkLegalMove(nextX, nextY)) {
+                    if (tab[nextX][nextY] == 2 || tab[nextX][nextY] == 6) {
+                        roadToFruit = false;
 
-                        backPathStack.push(new int[]{curX,curY});
-                        tab[nextX][nextY] = 7;
+                        foundMove = true;
+                        if (tab[nextX][nextY] == 6) {
+                            collectedFruit++;
+                            tab[nextX][nextY] = 9;
+                        } else {
+                            tab[nextX][nextY] = 7;
+                        }
+
+                        backPathStack.push(new int[]{curX, curY});
+
 
                         curX = nextX;
                         curY = nextY;
@@ -403,10 +419,12 @@ public class MazeGeneratorWithFruit {
                     }
                 }
             }
-            if (!foundMove){
-                tab[curX][curY] = 8;
+            if (tab[curX][curY] == 9) roadToFruit = true;
+
+            if (!foundMove) {
+                if (!roadToFruit) tab[curX][curY] = 8;
 //                backPathStack.pop();
-                if (!backPathStack.isEmpty()){
+                if (!backPathStack.isEmpty()) {
                     int[] prePosition = backPathStack.pop();
                     curX = prePosition[0];
                     curY = prePosition[1];
@@ -414,6 +432,5 @@ public class MazeGeneratorWithFruit {
             }
         }
     }
-
 }
 
