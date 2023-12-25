@@ -1,9 +1,9 @@
-package com.example.alg4;
+package com.example.alg5;
 
 import java.util.Random;
 import java.util.Stack;
 
-public class MazeGenerator {
+public class MazeGeneratorWithFruit {
 
     private int[][] tab;
 
@@ -17,7 +17,9 @@ public class MazeGenerator {
     private int endY;
     private Random random = new Random();
 
-    public MazeGenerator(int size,int startX, int startY,int endX, int endY) {
+    private int amountOfFruit;
+
+    public MazeGeneratorWithFruit(int size, int startX, int startY, int endX, int endY) {
         int walls = size -1;
         this.tab = new int[size+walls][size+walls];
         this.startX = startX;
@@ -36,19 +38,126 @@ public class MazeGenerator {
         setPoints();
         choiceWayToEnd();
         System.out.println("Pierwszy etap:");
-//        showMaze();
         setStart();
-        //Drug etap
         makeRestOfAre();
-//        System.out.println("\n\n");
-//        System.out.println("Drugi etap:");
+        //Drugi Etap
+        setFruit();
+        showMaze();
+        System.out.println("\n\n");
+
+        pickingFruit();
         showMaze();
 
     }
+
+    public void startAlg2(){
+        setTab();
+        showMaze();
+        System.out.println("\n\n");
+        System.out.println("Drugi: \n");
+        amountOfFruit = 7;
+        pickingFruit();
+        showMaze();
+    }
+
     private void setStart(){
         tab[startX*2][startY*2] = 4;
     }
 
+    private void setTab(){
+        tab = new int[9][9];
+
+        tab[0][0] = 4;
+        tab[0][1] = 2;
+        tab[0][2] = 2;
+        tab[0][3] = 1;
+        tab[0][4] = 2;
+        tab[0][5] = 2;
+        tab[0][6] = 2;
+        tab[0][7] = 1;
+        tab[0][8] = 2;
+
+
+        tab[1][0] = 1;
+        tab[1][1] = 1;
+        tab[1][2] = 6;
+        tab[1][3] = 1;
+        tab[1][4] = 1;
+        tab[1][5] = 1;
+        tab[1][6] = 2;
+        tab[1][7] = 1;
+        tab[1][8] = 2;
+
+        tab[2][0] = 2;
+        tab[2][1] = 2;
+        tab[2][2] = 6;
+        tab[2][3] = 6;
+        tab[2][4] = 2;
+        tab[2][5] = 2;
+        tab[2][6] = 2;
+        tab[2][7] = 1;
+        tab[2][8] = 2;
+
+        tab[3][0] = 2;
+        tab[3][1] = 1;
+        tab[3][2] = 1;
+        tab[3][3] = 1;
+        tab[3][4] = 1;
+        tab[3][5] = 1;
+        tab[3][6] = 1;
+        tab[3][7] = 1;
+        tab[3][8] = 6;
+
+        tab[4][0] = 2;
+        tab[4][1] = 1;
+        tab[4][2] = 2;
+        tab[4][3] = 2;
+        tab[4][4] = 2;
+        tab[4][5] = 1;
+        tab[4][6] = 2;
+        tab[4][7] = 6;
+        tab[4][8] = 2;
+
+        tab[5][0] = 2;
+        tab[5][1] = 1;
+        tab[5][2] = 2;
+        tab[5][3] = 1;
+        tab[5][4] = 2;
+        tab[5][5] = 1;
+        tab[5][6] = 1;
+        tab[5][7] = 1;
+        tab[5][8] = 2;
+
+        tab[6][0] = 2;
+        tab[6][1] = 2;
+        tab[6][2] = 2;
+        tab[6][3] = 1;
+        tab[6][4] = 2;
+        tab[6][5] = 2;
+        tab[6][6] = 6;
+        tab[6][7] = 2;
+        tab[6][8] = 2;
+
+        tab[7][0] = 2;
+        tab[7][1] = 1;
+        tab[7][2] = 6;
+        tab[7][3] = 1;
+        tab[7][4] = 1;
+        tab[7][5] = 1;
+        tab[7][6] = 2;
+        tab[7][7] = 1;
+        tab[7][8] = 2;
+
+        tab[8][0] = 2;
+        tab[8][1] = 1;
+        tab[8][2] = 2;
+        tab[8][3] = 2;
+        tab[8][4] = 2;
+        tab[8][5] = 1;
+        tab[8][6] = 5;
+        tab[8][7] = 1;
+        tab[8][8] = 2;
+    }
     private void makeRestOfAre(){
 
         while (!isAreFull()){
@@ -191,7 +300,7 @@ public class MazeGenerator {
             if (tab[x][y - 2] == 5){
                 tab[x][y-1] = 2;
                 return true;
-        }
+            }
         }
         return false;
     }
@@ -234,6 +343,9 @@ public class MazeGenerator {
                 if (tab[i][y] == 3) System.out.print("? ");
                 if (tab[i][y] == 4) System.out.print("S ");
                 if (tab[i][y] == 5) System.out.print("E ");
+                if (tab[i][y] == 6) System.out.print("& ");
+                if (tab[i][y] == 7) System.out.print("X ");
+                if (tab[i][y] == 8) System.out.print("* ");
                 if (y == tab.length-1) System.out.print("# ");
             }
             System.out.println();
@@ -242,4 +354,66 @@ public class MazeGenerator {
             System.out.print("# ");
         }
     }
+
+    private void setFruit(){
+
+        amountOfFruit = random.nextInt(7) + 2;
+        int curAmount = 0;
+
+        while (curAmount < amountOfFruit){
+
+            int positionX = random.nextInt(tab.length);
+            int positionY = random.nextInt(tab.length);
+
+            if (tab[positionX][positionY] == 2){
+                tab[positionX][positionY] = 6;
+                curAmount++;
+            }
+
+        }
+    }
+
+
+    private void pickingFruit(){
+
+        int[][] directions = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+        int curX = startX;
+        int curY = startY;
+
+        Stack<int[]> backPathStack = new Stack<>();
+
+        int collectedFruit = 0;
+        while (collectedFruit < amountOfFruit){
+            boolean foundMove = false;
+            for (int[] dir : directions) {
+                int nextX = curX + dir[0];
+                int nextY = curY + dir[1];
+
+                if (checkLegalMove(nextX,nextY)){
+                    if (tab[nextX][nextY] == 2 || tab[nextX][nextY] == 6){
+                        foundMove = true;
+                        if (tab[nextX][nextY] == 6) collectedFruit++;
+
+                        backPathStack.push(new int[]{curX,curY});
+                        tab[nextX][nextY] = 7;
+
+                        curX = nextX;
+                        curY = nextY;
+                        break;
+                    }
+                }
+            }
+            if (!foundMove){
+                tab[curX][curY] = 8;
+//                backPathStack.pop();
+                if (!backPathStack.isEmpty()){
+                    int[] prePosition = backPathStack.pop();
+                    curX = prePosition[0];
+                    curY = prePosition[1];
+                }
+            }
+        }
+    }
+
 }
+
