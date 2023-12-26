@@ -7,5 +7,6 @@ public class Main2 {
         MazeGeneratorWithFruit mazeGeneratorWithFruit = new MazeGeneratorWithFruit(5,0,0,4,3);
 
         mazeGeneratorWithFruit.startAlg2();
+
     }
 }

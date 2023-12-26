@@ -50,13 +50,32 @@ public class MazeGeneratorWithFruit {
 
     }
 
+    public void startGeneratingMaze2(){
+        System.out.println("Start GeneratingMaze2");
+        //Pierwszy etap
+        createTable();
+        setPoints();
+        choiceWayToEnd();
+        System.out.println("Pierwszy etap: ");
+        setStart();
+        makeRestOfAre();
+        showMaze();
+        //Drugi Etap
+        System.out.println("\n Drugi etap: ");
+        setFruit();
+        showMaze();
+        System.out.println("\n Trzeci etap: ");
+        pickingFruit();
+        showMaze();
+    }
+
     public void startAlg2() {
         setTab();
         showMaze();
         System.out.println("\n\n");
         System.out.println("Drugi: \n");
-
-        amountOfFruit = 7;
+//        findEnd();
+        amountOfFruit = 5;
         pickingFruit();
         showMaze();
     }
@@ -69,31 +88,31 @@ public class MazeGeneratorWithFruit {
         tab = new int[9][9];
 
         tab[0][0] = 4;
-        tab[0][1] = 2;
-        tab[0][2] = 2;
-        tab[0][3] = 1;
+        tab[0][1] = 1;
+        tab[0][2] = 6;
+        tab[0][3] = 2;
         tab[0][4] = 2;
-        tab[0][5] = 2;
+        tab[0][5] = 6;
         tab[0][6] = 2;
-        tab[0][7] = 1;
+        tab[0][7] = 2;
         tab[0][8] = 2;
 
 
-        tab[1][0] = 1;
+        tab[1][0] = 2;
         tab[1][1] = 1;
-        tab[1][2] = 6;
+        tab[1][2] = 2;
         tab[1][3] = 1;
-        tab[1][4] = 1;
+        tab[1][4] = 2;
         tab[1][5] = 1;
-        tab[1][6] = 2;
+        tab[1][6] = 1;
         tab[1][7] = 1;
-        tab[1][8] = 2;
+        tab[1][8] = 1;
 
         tab[2][0] = 2;
         tab[2][1] = 2;
-        tab[2][2] = 6;
-        tab[2][3] = 6;
-        tab[2][4] = 2;
+        tab[2][2] = 2;
+        tab[2][3] = 1;
+        tab[2][4] = 6;
         tab[2][5] = 2;
         tab[2][6] = 2;
         tab[2][7] = 1;
@@ -105,23 +124,23 @@ public class MazeGeneratorWithFruit {
         tab[3][3] = 1;
         tab[3][4] = 1;
         tab[3][5] = 1;
-        tab[3][6] = 1;
+        tab[3][6] = 2;
         tab[3][7] = 1;
-        tab[3][8] = 6;
+        tab[3][8] = 2;
 
         tab[4][0] = 2;
-        tab[4][1] = 1;
+        tab[4][1] = 2;
         tab[4][2] = 2;
-        tab[4][3] = 2;
+        tab[4][3] = 1;
         tab[4][4] = 2;
-        tab[4][5] = 1;
+        tab[4][5] = 2;
         tab[4][6] = 2;
-        tab[4][7] = 6;
+        tab[4][7] = 1;
         tab[4][8] = 2;
 
         tab[5][0] = 2;
         tab[5][1] = 1;
-        tab[5][2] = 2;
+        tab[5][2] = 1;
         tab[5][3] = 1;
         tab[5][4] = 2;
         tab[5][5] = 1;
@@ -130,31 +149,31 @@ public class MazeGeneratorWithFruit {
         tab[5][8] = 2;
 
         tab[6][0] = 2;
-        tab[6][1] = 2;
+        tab[6][1] = 1;
         tab[6][2] = 2;
-        tab[6][3] = 1;
-        tab[6][4] = 2;
+        tab[6][3] = 2;
+        tab[6][4] = 6;
         tab[6][5] = 2;
-        tab[6][6] = 6;
+        tab[6][6] = 2;
         tab[6][7] = 2;
         tab[6][8] = 2;
 
-        tab[7][0] = 2;
+        tab[7][0] = 1;
         tab[7][1] = 1;
-        tab[7][2] = 6;
+        tab[7][2] = 2;
         tab[7][3] = 1;
         tab[7][4] = 1;
         tab[7][5] = 1;
-        tab[7][6] = 2;
+        tab[7][6] = 1;
         tab[7][7] = 1;
         tab[7][8] = 2;
 
         tab[8][0] = 2;
-        tab[8][1] = 1;
+        tab[8][1] = 2;
         tab[8][2] = 2;
-        tab[8][3] = 2;
+        tab[8][3] = 6;
         tab[8][4] = 2;
-        tab[8][5] = 1;
+        tab[8][5] = 2;
         tab[8][6] = 5;
         tab[8][7] = 1;
         tab[8][8] = 2;
@@ -352,6 +371,7 @@ public class MazeGeneratorWithFruit {
                 if (tab[i][y] == 7) System.out.print("X ");
                 if (tab[i][y] == 8) System.out.print("  ");
                 if (tab[i][y] == 9) System.out.print("X ");
+                if (tab[i][y] == 10) System.out.print("X ");
                 if (y == tab.length - 1) System.out.print("# ");
             }
             System.out.println();
@@ -425,6 +445,48 @@ public class MazeGeneratorWithFruit {
                 if (!roadToFruit) tab[curX][curY] = 8;
 //                backPathStack.pop();
                 if (!backPathStack.isEmpty()) {
+                    int[] prePosition = backPathStack.pop();
+                    curX = prePosition[0];
+                    curY = prePosition[1];
+                }
+            }
+        }
+    }
+
+    private void findEnd(){
+
+        int[][] directions = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+        int curX = startX;
+        int curY = startY;
+        Stack<int[]> backPathStack = new Stack<>();
+
+        boolean endHasFound = false;
+
+        while (!endHasFound) {
+
+            boolean foundMove = false;
+            for (int[] dir : directions) {
+                int nextX = curX + dir[0];
+                int nextY = curY + dir[1];
+
+                if (checkLegalMove(nextX, nextY)) {
+                    if (tab[nextX][nextY] == 2 || tab[nextX][nextY] == 6 || tab[nextX][nextY] == 5) {
+                        foundMove = true;
+                        if (tab[nextX][nextY] == 5) {
+                            endHasFound = true;
+                        } else {
+                            tab[nextX][nextY] = 7;
+                        }
+                        backPathStack.push(new int[]{curX, curY});
+                        curX = nextX;
+                        curY = nextY;
+                        break;
+                    }
+                }
+            }
+            if (!foundMove) {
+                if (!backPathStack.isEmpty()) {
+                    tab[curX][curY] = 8;
                     int[] prePosition = backPathStack.pop();
                     curX = prePosition[0];
                     curY = prePosition[1];
